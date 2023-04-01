@@ -5,8 +5,6 @@ import com.haftom.developinganapi.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/courses/")
 public class CourseController {
@@ -20,7 +18,7 @@ public class CourseController {
     }
 
     @GetMapping("{id}")
-    public Optional<Course> getCourseById(@PathVariable ("id") long courseId){
+    public Course getCourseById(@PathVariable ("id") long courseId){
         return courseService.getCourseById(courseId);
     }
 
@@ -35,8 +33,8 @@ public class CourseController {
     }
 
     @PutMapping("{id}")
-    public void updateCourse(@PathVariable("id") long courseId, @RequestBody Course course){
-        courseService.updateCourse(courseId, course);
+    public Course updateCourse(@PathVariable("id") long courseId, @RequestBody Course course){
+        return courseService.updateCourse(courseId, course);
     }
 
     @DeleteMapping("{id}")

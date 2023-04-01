@@ -1,11 +1,10 @@
 package com.haftom.developinganapi.service;
 
+import com.haftom.developinganapi.exception.CourseNotFoundException;
 import com.haftom.developinganapi.model.Course;
 import com.haftom.developinganapi.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class CourseServiceImpl implements CourseService{
@@ -19,8 +18,11 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Optional<Course> getCourseById(long courseId) {
-        return courseRepository.findById(courseId);
+    public Course getCourseById(long courseId) {
+
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException
+                        (String.format("No course with id % is available", courseId)));
     }
 
     @Override
@@ -34,18 +36,21 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public void updateCourse(long courseId, Course course) {
-        courseRepository.findById(courseId).ifPresent(c -> {
-            c.setName(course.getName());
-            c.setCategory(course.getCategory());
-            c.setDescription(course.getDescription());
-            c.setRating(course.getRating());
-            courseRepository.save(c);
-        });
+    public Course updateCourse(long courseId, Course course) {
+        Course existingCourse = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException
+                        (String.format("No course with id % is available", courseId)));
+        existingCourse.setName(course.getName());
+        existingCourse.setCategory(course.getCategory());
+        existingCourse.setDescription(course.getDescription());
+        existingCourse.setRating(course.getRating());
+        return courseRepository.save(existingCourse);
     }
 
     @Override
     public void deleteCourseById(long courseId) {
+        courseRepository.findById(courseId).orElseThrow(() -> new CourseNotFoundException
+                (String.format("No course with id % is available", courseId)));
         courseRepository.deleteById(courseId);
     }
 
