@@ -22,7 +22,7 @@ public class CourseServiceImpl implements CourseService{
 
         return courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException
-                        (String.format("No course with id % is available", courseId)));
+                        (String.format("No course with id %s is available", courseId)));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CourseServiceImpl implements CourseService{
     public Course updateCourse(long courseId, Course course) {
         Course existingCourse = courseRepository.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException
-                        (String.format("No course with id % is available", courseId)));
+                        (String.format("No course with id %s is available", courseId)));
         existingCourse.setName(course.getName());
         existingCourse.setCategory(course.getCategory());
         existingCourse.setDescription(course.getDescription());
@@ -50,7 +50,7 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public void deleteCourseById(long courseId) {
         courseRepository.findById(courseId).orElseThrow(() -> new CourseNotFoundException
-                (String.format("No course with id % is available", courseId)));
+                (String.format("No course with id %s is available", courseId)));
         courseRepository.deleteById(courseId);
     }
 
